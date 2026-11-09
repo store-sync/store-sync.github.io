@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "Workflow triggered by: ${{ github.actor }}"
 
-          if [ "${{ github.actor }}" != "kphaneendra337@gmail.com" ]; then
+          if [ "${{ github.actor }}" != "store-sync" ]; then
             echo "❌ You are not authorized to run the Production pipeline."
             exit 1
           fi
