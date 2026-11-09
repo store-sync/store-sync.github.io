@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "Workflow triggered by: ${{ github.actor }}"
 
-          if [ "${{ github.actor }}" != "YOUR_GITHUB_USERNAME" ]; then
+          if [ "${{ github.actor }}" != "kphaneendra337@gmail.com" ]; then
             echo "❌ You are not authorized to run the Production pipeline."
             exit 1
           fi
