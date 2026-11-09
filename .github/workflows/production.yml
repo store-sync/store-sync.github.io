@@ -1,65 +1,55 @@
 name: Production
 
 on:
-  push:
-    branches:
-      - develop
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   production:
-    name: Build and Deploy Production
+    name: Production Build
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout source code
+      - name: Check authorized user
+        run: |
+          echo "Workflow triggered by: ${{ github.actor }}"
+
+          if [ "${{ github.actor }}" != "YOUR_GITHUB_USERNAME" ]; then
+            echo "❌ You are not authorized to run the Production pipeline."
+            exit 1
+          fi
+
+          echo "✅ Authorized user."
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # Check commit author email
-      - name: Verify authorized user
-        run: |
-          AUTHOR_EMAIL=$(git log -1 --pretty=format:'%ae')
-
-          echo "Commit author email: $AUTHOR_EMAIL"
-
-          if [ "$AUTHOR_EMAIL" != "${{ secrets.PRODUCTION_EMAIL }}" ]; then
-            echo "❌ Unauthorized user. Production pipeline stopped."
-            exit 1
-          fi
-
-          echo "✅ Authorized user verified."
-
-      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
-      # Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # Build Vue project
-      - name: Build project
+      - name: Build Vue project
         run: npm run build
 
-      # Generate automatic version
       - name: Generate version
         id: version
         run: |
           VERSION="v$(date +'%Y.%m.%d').${{ github.run_number }}"
+
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
           echo "Generated version: $VERSION"
 
-      # Create Git tag automatically
       - name: Create and push version tag
         run: |
           git config user.name "GitHub Actions"
@@ -70,8 +60,7 @@ jobs:
 
           git push origin "${{ steps.version.outputs.version }}"
 
-      # Deploy ONLY dist files to production branch
-      - name: Deploy dist to production branch
+      - name: Deploy only dist files
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
