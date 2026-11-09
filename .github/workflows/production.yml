@@ -65,6 +65,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          publish_branch: production
+          publish_branch: github-build
           force_orphan: true
           commit_message: "Production build ${{ steps.version.outputs.version }}"
