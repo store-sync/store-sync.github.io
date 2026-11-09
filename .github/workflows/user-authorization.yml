@@ -1,0 +1,43 @@
+name: User Authorization
+
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authorize:
+    name: Verify Authorized User
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check User Authorization
+        shell: bash
+        env:
+          ACTOR: ${{ github.actor }}
+        run: |
+          ALLOWED_USERS=("store-sync")
+
+          echo "Checking user: $ACTOR"
+
+          AUTHORIZED=false
+
+          for USER in "${ALLOWED_USERS[@]}"; do
+            if [[ "$ACTOR" == "$USER" ]]; then
+              AUTHORIZED=true
+              break
+            fi
+          done
+
+          if [[ "$AUTHORIZED" != "true" ]]; then
+            echo "Unauthorized user: $ACTOR"
+            echo "Access denied."
+            exit 1
+          fi
+
+          echo "Authorized user: $ACTOR"
+          echo "Access granted."
