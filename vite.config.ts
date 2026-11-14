@@ -5,4 +5,14 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
+   resolve: {
+    alias: {
+      "@components": "/src/components",
+      "@layouts": "/src/layouts",
+      "@views": "/src/views",
+      "@assets": "/src/assets",
+      "@utils": "/src/utils",
+      "@store": "/src/store"
+    }
+  }
 })
