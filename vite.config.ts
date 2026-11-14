@@ -1,18 +1,23 @@
-import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
 
-// https://vite.dev/config/
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
+import { fileURLToPath, URL } from 'node:url'
+
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
-   resolve: {
+
+  resolve: {
     alias: {
-      "@components": "/src/components",
-      "@layouts": "/src/layouts",
-      "@views": "/src/views",
-      "@assets": "/src/assets",
-      "@utils": "/src/utils",
-      "@store": "/src/store"
-    }
-  }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
+      '@layouts': fileURLToPath(new URL('./src/layouts', import.meta.url)),
+      '@views': fileURLToPath(new URL('./src/views', import.meta.url)),
+      '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
+      '@utils': fileURLToPath(new URL('./src/utils', import.meta.url)),
+      '@services': fileURLToPath(new URL('./src/services', import.meta.url)),
+      '@stores': fileURLToPath(new URL('./src/stores', import.meta.url)),
+      '@router': fileURLToPath(new URL('./src/router', import.meta.url)),
+    },
+  },
 })
