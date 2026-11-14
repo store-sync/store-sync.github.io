@@ -7,5 +7,5 @@
     </div>
 </template>
 <script lang="ts" setup>
-import leftMenu from '@components/menu/LeftMenu.vue'
+import leftMenu from '../components/menu/LeftMenu.vue';
 </script>
