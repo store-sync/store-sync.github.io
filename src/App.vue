@@ -2,5 +2,5 @@
 import LeftNavigation from '@layouts/LeftNavigation.vue';
 </script>
 <template>
-    <LeftNavigation />
+    <LeftNavigation class="p-4 bg-sky-500"/>
 </template>
